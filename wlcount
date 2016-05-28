@@ -1,0 +1,43 @@
+#!/usr/bin/python
+"""Count frequency of word lengths in text files.
+
+This script splits all words in a file based on whitespace and counts how many
+words of each character length are present.  The script reports the counts in
+a tabular format with the first column being a character length and the scond
+column being the number of words in the file that are that length in characters:
+
+==> filename <==
+Length\tCount
+N\tM
+
+Where filename is the name of the file, N is a character length, and 
+M is the number of words that are N characters in length.
+"""
+
+import io
+
+from collections import Counter
+
+HEADER = 'Length', 'Count'
+
+def wlcount(blob):
+    return Counter(len(word) for word in blob.split())
+
+def main(filenames):
+    for filename in filenames:
+        print '==> {} <==\t'.format(filename)
+        print '{}\t{}'.format(*HEADER)
+        with io.open(filename, mode='r') as inputfile:
+            for length, count in wlcount(inputfile.read()).iteritems():
+                print '{}\t{}'.format(length, count)
+
+if __name__ == '__main__':
+    import sys
+    import os
+    script, args = sys.argv[0], sys.argv[1:]
+    if not all(map(os.path.isfile, args)):
+        message = 'usage: {} file [file ...]'.format(script)
+        print >> sys.stderr, __doc__
+        print >> sys.stderr, message
+        sys.exit(1)
+    main(args)
