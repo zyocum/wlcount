@@ -1,4 +1,4 @@
-#`wlcount`
+# `wlcount`
 Count frequency of word lengths in text files.
 
 This script splits all words in a file based on whitespace and counts how many
